@@ -39,6 +39,7 @@ This method returns array of structures with following fields:
 - **RemainingParCount** `(int)` - Remaining (current) number of par-files in group.
 - **MinPostTime** `(int)` - Date/time when the oldest file in the group was posted to newsgroup (Time is in C/Unix format).
 - **MaxPostTime** `(int)` - Date/time when the newest file in the group was posted to newsgroup (Time is in C/Unix format).
+- **AvgPostTime** `(int)` - Average date/time when the files in the group were posted to newsgroup, 0 if unknown (Time is in C/Unix format).
 - **MinPriority** `(int)` - ~~`v13.0`~~ Deprecated, use `MaxPriority` instead.
 - **MaxPriority** `(int)` - Priority of the group. “Max” in the field name has historical reasons.
 - **ActiveDownloads** `(int)` - Number of active downloads in the group. With this filed can be determined what group(s) is (are) being currently downloaded. In most cases only one group is downloaded at a time however more that one group can be downloaded simultaneously when the first group is almost completely downloaded.

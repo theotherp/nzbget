@@ -394,6 +394,7 @@ void Options::InitDefaults()
 	SetOption(URLFORCE.data(), "yes");
 	SetOption(TIMECORRECTION.data(), "0");
 	SetOption(PROPAGATIONDELAY.data(), "0");
+	SetOption(PROPAGATIONDELAYMODE.data(), "file");
 	SetOption(ARTICLECACHE.data(), "0");
 	SetOption(EVENTINTERVAL.data(), "0");
 	SetOption(SHELLOVERRIDE.data(), "");
@@ -724,6 +725,12 @@ void Options::InitOptions()
 	const int FileNamingValues[] = { nfAuto, nfArticle, nfNzb };
 	const int FileNamingCount = 4;
 	m_fileNaming = (EFileNaming)ParseEnumValue(FILENAMING.data(), FileNamingCount, FileNamingNames, FileNamingValues);
+
+	const char* PropagationDelayModeNames[] = { "file", "average" };
+	const int PropagationDelayModeValues[] = { pmFile, pmAverage };
+	const int PropagationDelayModeCount = 2;
+	m_propagationDelayMode = (EPropagationDelayMode)ParseEnumValue(PROPAGATIONDELAYMODE.data(),
+		PropagationDelayModeCount, PropagationDelayModeNames, PropagationDelayModeValues);
 
 	const char* HealthCheckNames[] = { "pause", "delete", "park", "none" };
 	const int HealthCheckValues[] = { hcPause, hcDelete, hcPark, hcNone };

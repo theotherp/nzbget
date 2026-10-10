@@ -33,6 +33,7 @@
 #include "QueueEditor.h"
 #include "NntpConnection.h"
 #include "DirectRenamer.h"
+#include "Options.h"
 
 class QueueCoordinator : public Thread, public Observer, public Debuggable
 {
@@ -56,8 +57,10 @@ public:
 	bool MergeQueueEntries(DownloadQueue* downloadQueue, NzbInfo* destNzbInfo, NzbInfo* srcNzbInfo);
 	bool SplitQueueEntries(DownloadQueue* downloadQueue, RawFileList* fileList, const char* name, NzbInfo** newNzbInfo);
 
-	// files posted less than propagationDelay seconds ago are held back from downloading
-	static bool IsPropagationWait(time_t postTime, int propagationDelay, time_t curDate);
+	// files posted less than propagationDelay seconds ago are held back from downloading;
+	// in average-mode nothing is held back if the average post time of the nzb (0 = unknown) is old enough
+	static bool IsPropagationWait(time_t postTime, time_t nzbAvgTime, int propagationDelay,
+		Options::EPropagationDelayMode mode, time_t curDate);
 
 protected:
 	void LogDebugInfo() override;

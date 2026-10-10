@@ -555,7 +555,8 @@ bool QueueCoordinator::GetNextArticle(DownloadQueue* downloadQueue, FileInfo* &f
 					bool alreadyChecked = !checkedFiles.empty() &&
 						std::find(checkedFiles.begin(), checkedFiles.end(), fileInfo1) != checkedFiles.end();
 
-					bool propagationWait = IsPropagationWait(fileInfo1->GetTime(), g_Options->GetPropagationDelay(), curDate);
+					bool propagationWait = IsPropagationWait(fileInfo1->GetTime(), nzbInfo->GetAvgTime(),
+						g_Options->GetPropagationDelay(), g_Options->GetPropagationDelayMode(), curDate);
 
 					bool higherPriority = fileInfo &&
 						((fileInfo1->GetExtraPriority() == fileInfo->GetExtraPriority() &&
@@ -627,9 +628,20 @@ bool QueueCoordinator::GetNextArticle(DownloadQueue* downloadQueue, FileInfo* &f
 	return false;
 }
 
-bool QueueCoordinator::IsPropagationWait(time_t postTime, int propagationDelay, time_t curDate)
+bool QueueCoordinator::IsPropagationWait(time_t postTime, time_t nzbAvgTime, int propagationDelay,
+	Options::EPropagationDelayMode mode, time_t curDate)
 {
-	return propagationDelay > 0 && (int)postTime + propagationDelay >= (int)curDate;
+	if (propagationDelay <= 0)
+	{
+		return false;
+	}
+
+	if (mode == Options::pmAverage && nzbAvgTime > 0 && (int)nzbAvgTime + propagationDelay < (int)curDate)
+	{
+		return false;
+	}
+
+	return (int)postTime + propagationDelay >= (int)curDate;
 }
 
 bool QueueCoordinator::GetNextFirstArticle(NzbInfo* nzbInfo, FileInfo* &fileInfo, ArticleInfo* &articleInfo)
@@ -1222,7 +1234,14 @@ bool QueueCoordinator::MergeQueueEntries(DownloadQueue* downloadQueue, NzbInfo* 
 	}
 	srcNzbInfo->GetFileList()->clear();
 
-	destNzbInfo->SetFileCount(destNzbInfo->GetFileCount() + srcNzbInfo->GetFileCount());
+	// average post time weighted by file count; unknown (0) if any part is unknown
+	int destFileCount = destNzbInfo->GetFileCount();
+	int srcFileCount = srcNzbInfo->GetFileCount();
+	destNzbInfo->SetAvgTime(destNzbInfo->GetAvgTime() > 0 && srcNzbInfo->GetAvgTime() > 0 && destFileCount + srcFileCount > 0 ?
+		(time_t)(((int64)destNzbInfo->GetAvgTime() * destFileCount + (int64)srcNzbInfo->GetAvgTime() * srcFileCount) /
+			(destFileCount + srcFileCount)) : 0);
+
+	destNzbInfo->SetFileCount(destFileCount + srcFileCount);
 	destNzbInfo->SetActiveDownloads(destNzbInfo->GetActiveDownloads() + srcNzbInfo->GetActiveDownloads());
 	destNzbInfo->SetFullContentHash(0);
 	destNzbInfo->SetFilteredContentHash(0);

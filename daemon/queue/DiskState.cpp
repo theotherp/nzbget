@@ -28,7 +28,7 @@
 #include "FileSystem.h"
 
 static const char* FORMATVERSION_SIGNATURE = "nzbget diskstate file version ";
-const int DISKSTATE_QUEUE_VERSION = 64;
+const int DISKSTATE_QUEUE_VERSION = 65;
 const int DISKSTATE_FILE_VERSION = 7;
 const int DISKSTATE_STATS_VERSION = 4;
 const int DISKSTATE_FEEDS_VERSION = 3;
@@ -559,7 +559,7 @@ void DiskState::SaveNzbInfo(NzbInfo* nzbInfo, StateDiskFile& outfile)
 		(int)nzbInfo->GetAddUrlPaused());
 	outfile.PrintLine("%i,%i,%i", nzbInfo->GetFileCount(), nzbInfo->GetParkedFileCount(),
 		nzbInfo->GetMessageCount());
-	outfile.PrintLine("%i,%i", (int)nzbInfo->GetMinTime(), (int)nzbInfo->GetMaxTime());
+	outfile.PrintLine("%i,%i,%i", (int)nzbInfo->GetMinTime(), (int)nzbInfo->GetMaxTime(), (int)nzbInfo->GetAvgTime());
 	outfile.PrintLine("%i,%i,%i,%i", (int)nzbInfo->GetParFull(),
 		nzbInfo->GetPostInfo() ? (int)nzbInfo->GetPostInfo()->GetForceParFull() : 0,
 		nzbInfo->GetPostInfo() ? (int)nzbInfo->GetPostInfo()->GetForceRepair() : 0,
@@ -773,10 +773,20 @@ bool DiskState::LoadNzbInfo(NzbInfo* nzbInfo, Servers* servers, StateDiskFile& i
 	nzbInfo->SetParkedFileCount(parkedFileCount);
 	nzbInfo->SetMessageCount(messageCount);
 
-	int minTime, maxTime;
-	if (infile.ScanLine("%i,%i", &minTime, &maxTime) != 2) goto error;
+	int minTime, maxTime, avgTime;
+	if (formatVersion >= 65)
+	{
+		if (infile.ScanLine("%i,%i,%i", &minTime, &maxTime, &avgTime) != 3) goto error;
+	}
+	else
+	{
+		if (infile.ScanLine("%i,%i", &minTime, &maxTime) != 2) goto error;
+		// unknown, the per-file propagation check applies
+		avgTime = 0;
+	}
 	nzbInfo->SetMinTime((time_t)minTime);
 	nzbInfo->SetMaxTime((time_t)maxTime);
+	nzbInfo->SetAvgTime((time_t)avgTime);
 
 	if (formatVersion >= 51)
 	{

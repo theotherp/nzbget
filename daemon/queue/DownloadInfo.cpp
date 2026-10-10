@@ -368,8 +368,11 @@ void NzbInfo::UpdateMinMaxTime()
 {
 	m_minTime = 0;
 	m_maxTime = 0;
+	m_avgTime = 0;
 
 	bool first = true;
+	int64 timeSum = 0;
+	int timeCount = 0;
 	for (FileInfo* fileInfo : &m_fileList)
 	{
 		if (first)
@@ -388,7 +391,14 @@ void NzbInfo::UpdateMinMaxTime()
 			{
 				m_maxTime = fileInfo->GetTime();
 			}
+			timeSum += fileInfo->GetTime();
+			timeCount++;
 		}
+	}
+
+	if (timeCount > 0)
+	{
+		m_avgTime = (time_t)(timeSum / timeCount);
 	}
 }
 
@@ -495,6 +505,7 @@ void NzbInfo::MoveFileList(NzbInfo* srcNzbInfo)
 
 	SetMinTime(srcNzbInfo->GetMinTime());
 	SetMaxTime(srcNzbInfo->GetMaxTime());
+	SetAvgTime(srcNzbInfo->GetAvgTime());
 }
 
 void NzbInfo::EnterPostProcess()

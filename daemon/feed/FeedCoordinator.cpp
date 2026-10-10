@@ -64,6 +64,7 @@ std::unique_ptr<NzbInfo> NzbInfoCreator::Create(const FeedInfo& feedInfo, const 
 	nzbInfo->SetSize(feedItemInfo.GetSize());
 	nzbInfo->SetMinTime(feedItemInfo.GetTime());
 	nzbInfo->SetMaxTime(feedItemInfo.GetTime());
+	nzbInfo->SetAvgTime(feedItemInfo.GetTime());
 
 	return nzbInfo;
 }

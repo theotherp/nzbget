@@ -37,6 +37,7 @@ This method returns an array of structures with following fields:
 - **RemainingFileCount** `(int)` - Number of parked files in group. If this number is greater than `0`, the history item can be returned to download queue using command `HistoryReturn` of method [editqueue](EDITQUEUE.md).
 - **MinPostTime** `(int)` - Date/time when the oldest file in the item was posted to newsgroup (Time is in C/Unix format).
 - **MaxPostTime** `(int)` - Date/time when the newest file in the item was posted to newsgroup (Time is in C/Unix format).
+- **AvgPostTime** `(int)` - Average date/time when the files in the item were posted to newsgroup, 0 if unknown (Time is in C/Unix format).
 - **TotalArticles** `(int)` - Total number of articles in all files of the group.
 - **SuccessArticles** `(int)` - Number of successfully downloaded articles.
 - **FailedArticles** `(int)` - Number of failed article downloads.

@@ -255,10 +255,15 @@ var Downloads = (new function($)
 		var progress = DownloadsUI.buildProgress(group, item.data.size, item.data.left, item.data.estimated);
 		var dupe = DownloadsUI.buildDupe(group.DupeKey, group.DupeScore, group.DupeMode);
 
-		// files are held back individually, so the newest file (often a par2) decides whether the group still waits
+		// files are held back individually, so the newest file (often a par2) decides whether the group still waits;
+		// in average-mode nothing is held back once the average post age exceeds the delay
+		var propagationDelay = parseInt(Options.option('PropagationDelay')) * 60;
 		var newestAge = new Date().getTime() / 1000 - (group.MaxPostTime + UISettings.timeZoneCorrection*60*60);
+		var averageAge = new Date().getTime() / 1000 - (group.AvgPostTime + UISettings.timeZoneCorrection*60*60);
+		var averageReached = Options.option('PropagationDelayMode') === 'average' &&
+			group.AvgPostTime > 0 && averageAge > propagationDelay;
 		var propagation = '';
-		if (group.ActiveDownloads == 0 && newestAge < parseInt(Options.option('PropagationDelay')) * 60)
+		if (group.ActiveDownloads == 0 && newestAge < propagationDelay && !averageReached)
 		{
 			propagation = '<span class="label label-warning text-uppercase" title="' + I18n.translate('desc_propagation_delayed') + '">' + I18n.translate('label_propagation_delayed') + '</span> ';
 		}

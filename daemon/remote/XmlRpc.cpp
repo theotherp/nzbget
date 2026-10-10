@@ -1974,6 +1974,7 @@ void NzbInfoXmlCommand::AppendNzbInfoFields(NzbInfo* nzbInfo)
 		"<member><name>FileCount</name><value><i4>%i</i4></value></member>\n"
 		"<member><name>MinPostTime</name><value><i4>%i</i4></value></member>\n"
 		"<member><name>MaxPostTime</name><value><i4>%i</i4></value></member>\n"
+		"<member><name>AvgPostTime</name><value><i4>%i</i4></value></member>\n"
 		"<member><name>TotalArticles</name><value><i4>%i</i4></value></member>\n"
 		"<member><name>SuccessArticles</name><value><i4>%i</i4></value></member>\n"
 		"<member><name>FailedArticles</name><value><i4>%i</i4></value></member>\n"
@@ -2030,6 +2031,7 @@ void NzbInfoXmlCommand::AppendNzbInfoFields(NzbInfo* nzbInfo)
 		"\"FileCount\" : %i,\n"
 		"\"MinPostTime\" : %i,\n"
 		"\"MaxPostTime\" : %i,\n"
+		"\"AvgPostTime\" : %i,\n"
 		"\"TotalArticles\" : %i,\n"
 		"\"SuccessArticles\" : %i,\n"
 		"\"FailedArticles\" : %i,\n"
@@ -2133,7 +2135,7 @@ void NzbInfoXmlCommand::AppendNzbInfoFields(NzbInfo* nzbInfo)
 			deleteStatusName[nzbInfo->GetDeleteStatus()], markStatusName[nzbInfo->GetMarkStatus()],
 			urlStatusName[nzbInfo->GetUrlStatus()],
 			fileSizeLo, fileSizeHi, fileSizeMB, nzbInfo->GetFileCount(),
-			(int)nzbInfo->GetMinTime(), (int)nzbInfo->GetMaxTime(),
+			(int)nzbInfo->GetMinTime(), (int)nzbInfo->GetMaxTime(), (int)nzbInfo->GetAvgTime(),
 			nzbInfo->GetTotalArticles(), nzbInfo->GetCurrentSuccessArticles(), nzbInfo->GetCurrentFailedArticles(),
 			nzbInfo->CalcHealth(), nzbInfo->CalcCriticalHealth(false),
 			*EncodeStr(nzbInfo->GetDupeKey()), nzbInfo->GetDupeScore(), dupeModeName[nzbInfo->GetDupeMode()],

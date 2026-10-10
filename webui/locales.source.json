@@ -4294,6 +4294,10 @@
     "message": "Rename downloaded non-archive files if obfuscated.\n\nRenames downloaded non-archive obfuscated files (such as standalone video)\nusing the NZB name or metadata.",
     "description": "Description for the option PostDownloadRename"
   },
+  "config_desc_propagationdelaymode": {
+    "message": "How the propagation delay is applied.\n\n File    - each file is held back until its own post age reaches the\n           propagation delay (option <PropagationDelay>);\n Average - if the average post age of all files in the nzb-file exceeds\n           the propagation delay, no files of the nzb-file are held back,\n           even if single files (for example an nfo-file added to the post\n           later) are very recent. Otherwise files are held back like in\n           mode \"File\".\n\nNOTE: This option has no effect if option <PropagationDelay> is set to \"0\".",
+    "description": "Description for the option PropagationDelayMode DO NOT translate option names enclosed in angle brackets (e.g., <OptionName>). DO NOT translate technical values enclosed in quotes. DO NOT translate the exact uppercase keywords (NOTE:, WARNING:, INFO:, INFO FOR DEVELOPERS:, MORE INFO:) as they are used to render UI badges. DO NOT translate configuration option values (Average, File) as they are fixed configuration values."
+  },
   "help_feed_filter_options_def": {
     "message": "Definition of an option: $1name:value$2",
     "description": "Definition of an option in feed filter. Used to show option syntax format."

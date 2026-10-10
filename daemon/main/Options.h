@@ -148,6 +148,7 @@ public:
 	static constexpr std::string_view URLFORCE = "UrlForce";
 	static constexpr std::string_view TIMECORRECTION = "TimeCorrection";
 	static constexpr std::string_view PROPAGATIONDELAY = "PropagationDelay";
+	static constexpr std::string_view PROPAGATIONDELAYMODE = "PropagationDelayMode";
 	static constexpr std::string_view ARTICLECACHE = "ArticleCache";
 	static constexpr std::string_view EVENTINTERVAL = "EventInterval";
 	static constexpr std::string_view SHELLOVERRIDE = "ShellOverride";
@@ -258,6 +259,11 @@ public:
 		nfAuto,
 		nfArticle,
 		nfNzb
+	};
+	enum EPropagationDelayMode
+	{
+		pmFile,
+		pmAverage
 	};
 	enum ECertVerifLevel
 	{
@@ -502,6 +508,7 @@ public:
 	bool GetUrlForce() const { return m_urlForce; }
 	int GetTimeCorrection() const { return m_timeCorrection; }
 	int GetPropagationDelay() const { return m_propagationDelay; }
+	EPropagationDelayMode GetPropagationDelayMode() const { return m_propagationDelayMode; }
 	int GetArticleCache() const { return m_articleCache; }
 	int GetEventInterval() const { return m_eventInterval; }
 	const std::string& GetShellOverride() const { return m_shellOverride; }
@@ -689,6 +696,7 @@ private:
 	bool m_urlForce = false;
 	int m_timeCorrection = 0;
 	int m_propagationDelay = 0;
+	EPropagationDelayMode m_propagationDelayMode = pmFile;
 	int m_articleCache = 0;
 	int m_eventInterval = 0;
 	std::string m_shellOverride;

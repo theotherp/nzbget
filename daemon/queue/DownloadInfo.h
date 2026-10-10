@@ -564,6 +564,8 @@ public:
 	void SetMinTime(time_t minTime) { m_minTime = minTime; }
 	time_t GetMaxTime() { return m_maxTime; }
 	void SetMaxTime(time_t maxTime) { m_maxTime = maxTime; }
+	time_t GetAvgTime() { return m_avgTime; }
+	void SetAvgTime(time_t avgTime) { m_avgTime = avgTime; }
 	void BuildDestDirName();
 	CString BuildFinalDirName();
 	CompletedFileList* GetCompletedFiles() { return &m_completedFiles; }
@@ -731,6 +733,7 @@ private:
 	int m_currentFailedArticles = 0;
 	time_t m_minTime = 0;
 	time_t m_maxTime = 0;
+	time_t m_avgTime = 0;
 	int m_priority = 0;
 	int m_extraPriority = 0;
 	CompletedFileList m_completedFiles;
